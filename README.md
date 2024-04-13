@@ -1,6 +1,10 @@
-# MST Algorithms
+# 15618 Final Project: Parallel MST Algorithms on Dynamic Graphs
 
-This repository contains tools and implementations for exploring and testing different Minimum Spanning Tree (MST) algorithms. It includes a Python script to generate random connected Watts Strogatz graphs and a C++ program to compute MSTs using Kruskal's and Prim's algorithms.
+This repository contains tools and implementations for exploring and testing different Minimum Spanning Tree (MST) algorithms. It includes a Python script to generate random connected Watts Strogatz graphs and a C++ program to compute MSTs using various algorithms.
+
+## Supported Algorithms
+- Kruskal's Algorithm
+- Prim's Algorithm
 
 ## Prerequisites
 
@@ -39,4 +43,4 @@ After building the project, you can run the MST algorithms using:
 ./mst -s <size>
 ```
 - `-s`: Specifies the size of the graph as an exponent of 10. For example, -s 5 means the graph size is 10^5 and the program will read from graph_5.txt.
-This command will execute both Kruskal's and Prim's algorithms on the graph described in graph_\<size\>.txt, outputting the runtimes and total weights of the MSTs generated (the total weights should match).
+For now, his command will execute Kruskal's and Prim's algorithms on the graph described in graph_\<size\>.txt, outputting the runtimes and total weights of the MSTs generated (the total weights should match).
