@@ -2,7 +2,7 @@ import networkx as nx
 import numpy as np
 import scipy.sparse as sp
 
-def generate_random_connected_graph(n, k, p, visualize=False, file_path="graph.txt", image_path="graph.png"):
+def generate_random_connected_graph(n, k, p, visualize=False, file_path="graph_1.txt", image_path="graph.png"):
     # Generate a connected Watts-Strogatz small-world graph
     G = nx.connected_watts_strogatz_graph(n, k, p)
     for (u, v, w) in G.edges(data=True):

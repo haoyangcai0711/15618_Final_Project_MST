@@ -2,7 +2,7 @@
 CC=g++
 
 # Define any compile-time flags
-CFLAGS=-Wall -g
+CFLAGS=-Wall -g -std=c++17 -fopenmp
 
 # Define the target executable
 TARGET=mst
@@ -18,4 +18,3 @@ mst.o: mst.cpp
 # Rule for cleaning up
 clean:
 	rm -f $(TARGET) *.o
-
