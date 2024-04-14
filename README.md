@@ -5,6 +5,8 @@ This repository contains tools and implementations for exploring and testing dif
 ## Supported Algorithms
 - Kruskal's Algorithm
 - Prim's Algorithm
+- Boruvka's Algorithm
+- Parallel Boruvka's Algorithm
 
 ## Prerequisites
 
@@ -43,4 +45,4 @@ After building the project, you can run the MST algorithms using:
 ./mst -s <size>
 ```
 - `-s`: Specifies the size of the graph as an exponent of 10. For example, -s 5 means the graph size is 10^5 and the program will read from graph_5.txt.
-For now, this command will execute Kruskal's and Prim's algorithms on the graph described in graph_\<size\>.txt, outputting the runtimes and total weights of the MSTs generated (the total weights should match).
+For now, this command will execute Kruskal's, Prim's, Boruvka's, and Parallel Boruvka's algorithms on the graph described in graph_\<size\>.txt, outputting the runtimes and total weights of the MSTs generated (the total weights should match).
