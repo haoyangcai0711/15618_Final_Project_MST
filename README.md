@@ -7,6 +7,7 @@ This repository contains tools and implementations for exploring and testing dif
 - Prim's Algorithm
 - Boruvka's Algorithm
 - Parallel Boruvka's Algorithm
+- Sequential MST Update on New Edges
 
 ## Prerequisites
 
@@ -47,3 +48,17 @@ After building the project, you can run the MST algorithms using:
 - `-s`: Specifies the size of the graph as an exponent of 10. For example, -s 5 means the graph size is 10^5 and the program will read from graph_5.txt.
 For now, this command will execute Kruskal's, Prim's, Boruvka's, and Parallel Boruvka's algorithms on the graph described in graph_\<size\>.txt, outputting the runtimes and total weights of the MSTs generated (the total weights should match).
 - `-t`: Specifies the number of threads to use in the Parallel Boruvka's algorithm.
+
+## Running the Dynamic MST Algorithms
+
+You can run the Sequential MST Update on New Edges using:
+```
+./dynamic -s <size>
+```
+- `-s`: Specifies the size of the graph as an exponent of 10. For example, -s 3 means the graph size is 10^3 and the program will read from graph_3.txt.
+The program shuffles the edges and partition them by 0.95 vs 0.05 ratio. We use the sequential Kruskal's algorithm to generate an MST using the first 95% of the edges, and add the remaining 5% using our MST update algorithm.
+The MST update algorithm is based on the following:
+- Edges that are not in the existing MST will not be in the new MST.
+- The newly added edge creates exactly one cycle if added to the existing MST.
+- We remove the heaviest edge from that cycle
+However, since this is the first draft of our implementation, the code is not optimized may be slow.
