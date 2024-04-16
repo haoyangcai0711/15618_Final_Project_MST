@@ -240,7 +240,7 @@ std::vector<Edge> boruvkaMST(const CSRGraph& graph) {
     return mstEdges;
 }
 
-std::vector<Edge> boruvkaMSTParallel(const CSRGraph& graph, int numThreads = 8, int granularity = 8) {
+std::vector<Edge> boruvkaMSTParallel(const CSRGraph& graph, int numThreads = 8, int granularity = 8192) {
     int numVertices = graph.row_ptr.size() - 1;
     UnionFindThreadSafe uf(numVertices);
     std::vector<Edge> mstEdges;
@@ -250,7 +250,7 @@ std::vector<Edge> boruvkaMSTParallel(const CSRGraph& graph, int numThreads = 8, 
         std::vector<Edge> cheapest(numVertices, { -1, -1, std::numeric_limits<int>::max() });
         // Find the cheapest outgoing edge for each component
         int u = 0;
-        #pragma omp parallel for default(none) private(u) shared(graph, uf, cheapest, numVertices) schedule(dynamic, 8) num_threads(numThreads)
+        #pragma omp parallel for default(none) private(u) shared(graph, uf, cheapest, numVertices, granularity) schedule(dynamic, granularity) num_threads(numThreads)
         for (u = 0; u < numVertices; ++u) {
             int compU = uf.find(u);
             for (int i = graph.row_ptr[u]; i < graph.row_ptr[u + 1]; ++i) {
@@ -270,6 +270,53 @@ std::vector<Edge> boruvkaMSTParallel(const CSRGraph& graph, int numThreads = 8, 
                 uf.unionSets(edge.u, edge.v);
                 numComponents--;
             }
+        }
+    }
+    return mstEdges;
+}
+
+std::vector<Edge> boruvkaMSTParallelV2(const CSRGraph& graph, int numThreads = 8, int granularity = 8192) {
+    int numVertices = graph.row_ptr.size() - 1;
+    UnionFindThreadSafe uf(numVertices);
+    std::vector<Edge> mstEdges;
+    int numComponents = numVertices;
+
+    while (numComponents > 1) {
+        std::vector<Edge> cheapest(numVertices, { -1, -1, std::numeric_limits<int>::max() });
+        // Find the cheapest outgoing edge for each component
+        int u = 0;
+        #pragma omp parallel for default(none) private(u) shared(graph, uf, cheapest, numVertices, granularity) schedule(dynamic, granularity) num_threads(numThreads)
+        for (u = 0; u < numVertices; ++u) {
+            int compU = uf.find(u);
+            for (int i = graph.row_ptr[u]; i < graph.row_ptr[u + 1]; ++i) {
+                int v = graph.col_indices[i];
+                int weight = graph.values[i];
+                int compV = uf.find(v);
+                if (compU != compV && weight < cheapest[compU].weight) {
+                    cheapest[compU] = { u, v, weight };
+                }
+            }
+        }
+        omp_set_num_threads(numThreads);
+        std::vector<std::vector<Edge>> privateEdges(numThreads);
+        #pragma omp parallel
+        {
+            int tid = omp_get_thread_num();
+            std::vector<Edge>& localEdges = privateEdges[tid];
+            #pragma omp for
+            for (int i = 0; i < numVertices; ++i) {
+                Edge edge = cheapest[i];
+                if (edge.u != -1 && uf.find(edge.u) != uf.find(edge.v)) {
+                    localEdges.push_back(edge);
+                    uf.unionSets(edge.u, edge.v);
+                    #pragma omp atomic
+                    numComponents--;
+                }
+            }
+        }
+        // Merge the vectors outside the parallel region
+        for (const auto& edges : privateEdges) {
+            mstEdges.insert(mstEdges.end(), edges.begin(), edges.end());
         }
     }
     return mstEdges;
