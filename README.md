@@ -57,6 +57,7 @@ You can run the Sequential MST Update on New Edges using:
 ```
 - `-s`: Specifies the size of the graph as an exponent of 10. For example, -s 3 means the graph size is 10^3 and the program will read from graph_3.txt.
 The program shuffles the edges and partition them by 0.95 vs 0.05 ratio. We use the sequential Kruskal's algorithm to generate an MST using the first 95% of the edges, and add the remaining 5% using our MST update algorithm.
+
 The MST update algorithm is based on the following:
 - Edges that are not in the existing MST will not be in the new MST.
 - The newly added edge creates exactly one cycle if added to the existing MST.
