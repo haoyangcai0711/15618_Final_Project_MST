@@ -6,47 +6,142 @@
     <title>15618 Final Project: Parallel MST Algorithms on Dynamic Graphs</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2, h3 {
+            background-color: #f4f4f9;
             color: #333;
         }
 
-        code {
-            font-family: Consolas, monospace;
-            background-color: #f0f0f0;
-            padding: 2px 4px;
-            border-radius: 4px;
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+
+        header {
+            background-color: #3a6ea5; /* Changed to a softer blue */
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+        }
+
+        header a {
+            color: #f0f8ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        header a:hover {
+            text-decoration: underline;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        p, ul {
+            line-height: 1.6;
+        }
+
+        code, pre {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #e7eef4;
+            padding: 5px;
+            border-radius: 5px;
         }
 
         pre {
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 4px;
             overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        .authors {
+            font-size: 0.9em;
+            font-style: italic;
+            color: #666;
+        }
+
+        .header-image {
+            display: block;
+            margin: 20px auto;
+            max-width: 50%; /* Adjusts the maximum width to 50% of its container */
+            height: auto; /* Keeps the aspect ratio */
+        }
+
+        .image-credit {
+            text-align: center;
+            font-size: 0.8em;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <header>
         <h1>15618 Final Project: Parallel MST Algorithms on Dynamic Graphs</h1>
-        <p>This repository contains tools and implementations for exploring and testing different Minimum Spanning Tree (MST) algorithms. It includes a Python script to generate random connected Watts Strogatz graphs and a C++ program to compute MSTs using various algorithms.</p>
+        <a href="https://github.com/haoyangcai0711/15618_Final_Project_MST" target="_blank">View on GitHub</a>
+    </header>
+    <div class="container">
+        <p class="authors">By Haoyang Cai &amp; Meixuan Li</p>
 
-        <h2>The Minimum Spanning Tree Problem</h2>
-        <p>The Minimum Spanning Tree (MST) problem is a fundamental problem in computer science and has numerous applications in various fields, including computer networking, circuit design, and transportation systems. Given a connected, weighted graph, the goal is to find a subset of edges that form a tree spanning all vertices and has the minimum total weight.</p>
-        <p>MSTs are useful in scenarios where it is necessary to connect a set of points with minimum cost while ensuring connectivity. For example, in computer networks, MSTs can be used to find the most efficient way to connect various nodes while minimizing the cost of cables or wireless links. In transportation systems, MSTs can help determine the most cost-effective routes for constructing roads or railways while connecting all cities or locations.</p>
+        <div>
+            <img class="header-image" src="mst_pic.jpg" alt="Minimum Spanning Tree">
+            <p class="image-credit">Source: <a href="https://homes.luddy.indiana.edu/achauhan/Teaching/B403/LectureNotes/09-mst.html" target="_blank">Minimum Spanning Tree</a></p>
+        </div>
+        
+        <h2>Project Summary</h2>
+        <p>Our project focuses on parallelizing the construction of Minimum Spanning Trees (MSTs) on dynamic graphs using shared-memory parallelism. We plan to develop an algorithm optimized for high parallelization using OpenMP and evaluate their performance and scalability across various multi-core CPU systems.</p>
+
+        <h2>Background</h2>
+        <p>Minimum Spanning Trees (MSTs) are structures in graph theory that have a wide range of applications in network design, clustering, and optimization problems. An MST is a subset of edges of a connected, edge-weighted, and undirected graph. The MST must connect all vertices together without any cycles and with the minimum possible total edge weight. Existing efficient algorithms for constructing MSTs, such as Kruskal’s and Prim’s algorithms, have been extensively studied and well-optimized on many systems.</p>
+        <p>However, many real-world problems require dynamic graphs, where the structure of the graph can change over time. Typical dynamic graphs support operations such as addition or deletion of vertices and edges. Recomputing the MST from scratch after each update is sub-optimal and computationally expensive, which led to the development of dynamic MST algorithms that efficiently updates the MST.</p>
+
+        <h2>The Challenge</h2>
+        <p>Parallelizing the construction of MSTs on dynamic graphs using shared-memory parallelism presents several challenges including data dependencies and synchronization, efficiently managing memory access patterns to minimize contention and optimize data locality, managing divergent execution paths among parallel threads to maintain efficiency, and analyzing the computation-to-communication ratio to optimize workload distribution and minimize overhead.</p>
+
+        <h2>Resources</h2>
+        <p>We started with the famous Kruskal’s and Prim’s algorithms that computes the MST sequentially on static graphs and then modify it for parallel execution on dynamic graphs. Computational resources include GHC Machines with 8-core CPUs and PSC Machines with 64 cores, offering powerful computational resources for evaluating the scalability of our parallel implementations.</p>
+
+        <h2>Goals</h2>
+        <p>Our core goals include developing a parallel algorithm for constructing MSTs using OpenMP, optimizing for high parallelization and scalability, evaluating the performance and scalability of the parallel algorithms through extensive benchmarking experiments, and conducting a comparative analysis between parallel and sequential implementations of MST construction algorithms.</p>
+        <p>Stretch goals include extended platform analysis comparing the performance and scalability of our parallel MST construction algorithm implemented using OpenMP with implementations on other parallel computing platforms such as CUDA and MPI.</p>
+        <p>However, it appears unlikely that we will achieve one of our "nice to have" goals—Extended Platform Analysis. This part of our project aimed to compare the performance and scalability of our OpenMP-based parallel MST algorithms with implementations on other parallel computing platforms such as CUDA and MPI. While this comparative analysis would provide valuable insights into the benefits and trade-offs of different parallelization techniques, time constraints and resource availability have limited our capacity to extend our research into these areas comprehensively.Our focus will remain on implementing an efficient parallel solution for the dynamic aspects of the MST algorithms, while continuing to ensure that our benchmarks and comparative analysis between sequential and parallel implementations are thorough and insightful. By concentrating on developing and optimizing dynamic updates within the MST algorithms using OpenMP, we aim to provide a solid foundation in shared-memory parallelism applications and highlight the specific enhancements that OpenMP can bring to dynamic MST construction. This effort is crucial as we address the complexities of real-time graph updates and strive to achieve optimal performance in dynamic graph scenarios. </p>
+
+        <h2>Demo and Learning Objectives</h2>
+        <p>At the poster session, we plan to demonstrate the effectiveness of our parallel MST construction algorithm implemented using OpenMP. We will showcase a side-by-side comparison of the sequential and parallel implementations, emphasizing the performance improvements and scalability achieved through parallelization. Our demo will include visual representations of speedup graphs and execution time comparisons, illustrating the efficiency gains of the parallel algorithm.</p>
+        <p>Through this project, we aim to learn effective strategies for parallelizing MST construction algorithms on multi-core CPU systems using shared-memory parallelism with OpenMP. Specifically, we seek to understand how to design parallel algorithms that exploit inherent parallelism in MST construction, mitigate common parallelization challenges such as data dependencies and synchronization, and optimize memory access patterns to maximize performance and scalability.</p>
+
+        <h2>Questions To Be Answered</h2>
+        <ul>
+            <li>How does parallelization impact the solution quality and convergence behavior of MST construction algorithms?</li>
+            <li>What are the primary bottlenecks in parallelizing MST construction algorithms using shared-memory parallelism with OpenMP, and how can they be overcome?</li>
+            <li>How do different optimization strategies, such as workload balancing and memory access optimizations, affect the performance and scalability of parallel MST construction algorithms on various multi-core CPU systems?</li>
+        </ul>
+
+        <h2>Project Plan</h2>
+        <p>So far, we have implemented sequential versions of Kruskal's, Prim's, and Boruvka's algorithms, as well as parallel versions of these algorithms using OpenMP. We have particularly focused on optimizing the parallel implementation of Boruvka's algorithm and have achieved significant speedups compared to the sequential version.</p>
+        <p>For the next two weeks, our plan is as follows:</p>
+        <ul>
+            <li><strong>Week 1:</strong> Finalize the parallel implementation for the dynamic update of the MST. This remains a complex aspect that requires further research and development.</li>
+            <li><strong>Week 2:</strong> Conduct extensive benchmarking experiments to evaluate the performance and scalability of both our existing and potentially dynamic parallel algorithms. Additionally, we will perform a comparative analysis between the sequential and parallel implementations, focusing on the performance impact and solution quality.</li>
+        </ul>
+        <p>By the end of these two weeks, we aim to have a robust and optimized parallel solution for the dynamic aspects of the MST algorithms, as well as comprehensive benchmarking results and analysis to demonstrate the benefits of our parallel approaches.</p>
 
         <h2>Supported Algorithms</h2>
         <ul>
@@ -99,16 +194,9 @@
             <li>The newly added edge creates exactly one cycle if added to the existing MST.</li>
             <li>We remove the heaviest edge from that cycle</li>
         </ul>
-        <p>However, since this is the first draft of our implementation, the code is not optimized may be slow.</p>
+        <p>Since this is the first draft of our implementation, the code is not optimized may be slow.</p>
 
-        <h2>Project Plan</h2>
-        <p>So far, we have implemented sequential versions of Kruskal's, Prim's, and Boruvka's algorithms, as well as parallel versions of these algorithms using OpenMP. We have particularly focused on optimizing the parallel implementation of Boruvka's algorithm and have achieved significant speedups compared to the sequential version.</p>
-        <p>For the next two weeks, our plan is as follows:</p>
-        <ul>
-            <li><strong>Week 1:</strong> Finalize the parallel implementation for the dynamic update of the MST. This remains a complex aspect that requires further research and development.</li>
-            <li><strong>Week 2:</strong> Conduct extensive benchmarking experiments to evaluate the performance and scalability of both our existing and potentially dynamic parallel algorithms. Additionally, we will perform a comparative analysis between the sequential and parallel implementations, focusing on the performance impact and solution quality.</li>
-        </ul>
-        <p>By the end of these two weeks, we aim to have a robust and optimized parallel solution for the dynamic aspects of the MST algorithms, as well as comprehensive benchmarking results and analysis to demonstrate the benefits of our parallel approaches.</p>
+        
     </div>
 </body>
 </html>
