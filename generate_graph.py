@@ -2,7 +2,7 @@ import networkx as nx
 import numpy as np
 import scipy.sparse as sp
 
-def generate_random_connected_graph(n, k, p, visualize=False, file_path="graph.txt", image_path="graph.png"):
+def generate_random_connected_graph(n, k, p, visualize=False, file_path="graph_1.txt", image_path="graph.png"):
     # Generate a connected Watts-Strogatz small-world graph
     G = nx.connected_watts_strogatz_graph(n, k, p)
     for (u, v, w) in G.edges(data=True):
@@ -14,10 +14,11 @@ def generate_random_connected_graph(n, k, p, visualize=False, file_path="graph.t
     col_ind = sparse_matrix.indices
     data = sparse_matrix.data
     with open(file_path, 'w') as f:
-        f.write(f"{G.number_of_edges()} {G.number_of_nodes()}\n")
-        f.write(" ".join(map(str, row_ptr)) + "\n")
-        f.write(" ".join(map(str, col_ind)) + "\n")
+        f.write(f"{2 * G.number_of_edges()} {G.number_of_nodes()}\n")
         f.write(" ".join(map(str, data)) + "\n")
+        f.write(" ".join(map(str, col_ind)) + "\n")
+        f.write(" ".join(map(str, row_ptr)) + "\n")
+        
     
     # Compute the MST
     mst = nx.minimum_spanning_tree(G, algorithm='prim')
