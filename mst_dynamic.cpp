@@ -177,7 +177,13 @@ void updateMST(std::vector<std::vector<Edge>> &mst,
     std::vector<bool> visited(mst.size(), false);
 
     std::deque<Edge> path_edges;
-    bfs(mst, mst_locks, new_edge.u, new_edge.v, visited, path_edges);
+    if (!bfs(mst, mst_locks, new_edge.u, new_edge.v, visited, path_edges)) {
+      printf("Thread %d: No path found between %d and %d (The original path "
+             "had been "
+             "modified by other threads)\n",
+             omp_get_thread_num(), new_edge.u, new_edge.v);
+      continue;
+    }
 
     Edge max_edge = path_edges[0];
     for (auto e : path_edges) {
