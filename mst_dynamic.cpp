@@ -160,9 +160,6 @@ bool bfs(std::vector<std::vector<Edge>> &mst,
       Edge edge = parent[at];
       path.push_front(edge);
       at = edge.u; // Move to the next node in the path
-      // printf("Thread %d: Adding edge %d-%d %d to path\n",
-      // omp_get_thread_num(),
-      //        edge.u, edge.v, edge.weight);
     }
   }
 
@@ -191,11 +188,12 @@ void updateMST(std::vector<std::vector<Edge>> &mst,
         max_edge = e;
       }
     }
-    printf("Thread %d: Max edge in path is %d-%d (%d), New edge is %d-%d (%d), "
-           "%s\n",
-           omp_get_thread_num(), max_edge.u, max_edge.v, max_edge.weight,
-           new_edge.u, new_edge.v, new_edge.weight,
-           max_edge.weight > new_edge.weight ? "UPDATE" : "");
+    // printf("Thread %d: Max edge in path is %d-%d (%d), New edge is %d-%d
+    // (%d), "
+    //        "%s\n",
+    //        omp_get_thread_num(), max_edge.u, max_edge.v, max_edge.weight,
+    //        new_edge.u, new_edge.v, new_edge.weight,
+    //        max_edge.weight > new_edge.weight ? "UPDATE" : "");
 
     if (max_edge.weight > new_edge.weight) {
       std::unique_lock lock1(mst_locks[max_edge.u]);
@@ -220,16 +218,10 @@ void updateMST(std::vector<std::vector<Edge>> &mst,
         continue;
       }
 
-      // printf("Thread %d is removing edge %d-%d %d\n", omp_get_thread_num(),
-      //        max_edge.u, max_edge.v, max_edge.weight);
-
       mst[max_edge.u].erase(it);
       mst[max_edge.v].erase(it2);
       lock1.unlock();
       lock2.unlock();
-
-      // printf("Thread %d is adding edge %d-%d %d\n", omp_get_thread_num(),
-      //        new_edge.u, new_edge.v, new_edge.weight);
 
       std::unique_lock lock3(mst_locks[new_edge.u]);
       std::unique_lock lock4(mst_locks[new_edge.v]);
@@ -313,13 +305,9 @@ int main(int argc, char *argv[]) {
   }
 
   std::vector<std::shared_mutex> mst_locks(mst.size());
-
   auto startUpdate = std::chrono::high_resolution_clock::now();
 #pragma omp parallel for
   for (Edge &e : edges_05) {
-    // printf("Thread %d is processing edge %d-%d %d\n", omp_get_thread_num(),
-    // e.u,
-    //        e.v, e.weight);
     updateMST(mst, mst_locks, e);
   }
   auto endUpdate = std::chrono::high_resolution_clock::now();
@@ -327,7 +315,6 @@ int main(int argc, char *argv[]) {
       endUpdate - startUpdate;
   std::cout << "Updating MST took " << elapsedUpdate.count()
             << " milliseconds.\n";
-  printf("New Edges Added: %lu\n", edges_05.size());
 
   // verify the correctness of the updated MST
   int total_weight = totalWeightMST(mst);
