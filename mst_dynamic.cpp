@@ -188,12 +188,6 @@ void updateMST(std::vector<std::vector<Edge>> &mst,
         max_edge = e;
       }
     }
-    // printf("Thread %d: Max edge in path is %d-%d (%d), New edge is %d-%d
-    // (%d), "
-    //        "%s\n",
-    //        omp_get_thread_num(), max_edge.u, max_edge.v, max_edge.weight,
-    //        new_edge.u, new_edge.v, new_edge.weight,
-    //        max_edge.weight > new_edge.weight ? "UPDATE" : "");
 
     if (max_edge.weight > new_edge.weight) {
       std::unique_lock lock1(mst_locks[max_edge.u]);
